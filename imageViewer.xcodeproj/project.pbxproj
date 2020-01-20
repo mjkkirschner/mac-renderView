@@ -7,14 +7,50 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9C3C606523D15D21009C446D /* imageViewer.h in Headers */ = {isa = PBXBuildFile; fileRef = 9C3C606423D15D21009C446D /* imageViewer.h */; };
-		9C3C606723D15D21009C446D /* imageViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C606623D15D21009C446D /* imageViewer.m */; };
+		9C3C606F23D15D5E009C446D /* entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C606E23D15D5E009C446D /* entry.swift */; };
+		9C3C607723D164FE009C446D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C607623D164FE009C446D /* main.cpp */; };
+		9C3C607E23D16D5D009C446D /* libimageViewer.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3C606123D15D21009C446D /* libimageViewer.dylib */; };
+		9C3C607F23D16D5D009C446D /* libimageViewer.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 9C3C606123D15D21009C446D /* libimageViewer.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9C3C608023D16D5D009C446D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9C3C605923D15D21009C446D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9C3C606023D15D21009C446D;
+			remoteInfo = imageViewer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C3C607223D164FE009C446D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		9C3C608223D16D5D009C446D /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9C3C607F23D16D5D009C446D /* libimageViewer.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9C3C606123D15D21009C446D /* libimageViewer.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libimageViewer.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C3C606423D15D21009C446D /* imageViewer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imageViewer.h; sourceTree = "<group>"; };
-		9C3C606623D15D21009C446D /* imageViewer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = imageViewer.m; sourceTree = "<group>"; };
+		9C3C606E23D15D5E009C446D /* entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entry.swift; sourceTree = "<group>"; };
+		9C3C607423D164FE009C446D /* imageViewerCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = imageViewerCmd; sourceTree = BUILT_PRODUCTS_DIR; };
+		9C3C607623D164FE009C446D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,6 +61,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9C3C607123D164FE009C446D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C3C607E23D16D5D009C446D /* libimageViewer.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -32,7 +76,9 @@
 			isa = PBXGroup;
 			children = (
 				9C3C606323D15D21009C446D /* imageViewer */,
+				9C3C607523D164FE009C446D /* imageViewerCmd */,
 				9C3C606223D15D21009C446D /* Products */,
+				9C3C607D23D16D5D009C446D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -40,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				9C3C606123D15D21009C446D /* libimageViewer.dylib */,
+				9C3C607423D164FE009C446D /* imageViewerCmd */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -47,10 +94,24 @@
 		9C3C606323D15D21009C446D /* imageViewer */ = {
 			isa = PBXGroup;
 			children = (
-				9C3C606423D15D21009C446D /* imageViewer.h */,
-				9C3C606623D15D21009C446D /* imageViewer.m */,
+				9C3C606E23D15D5E009C446D /* entry.swift */,
 			);
 			path = imageViewer;
+			sourceTree = "<group>";
+		};
+		9C3C607523D164FE009C446D /* imageViewerCmd */ = {
+			isa = PBXGroup;
+			children = (
+				9C3C607623D164FE009C446D /* main.cpp */,
+			);
+			path = imageViewerCmd;
+			sourceTree = "<group>";
+		};
+		9C3C607D23D16D5D009C446D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,7 +121,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C3C606523D15D21009C446D /* imageViewer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +144,25 @@
 			productReference = 9C3C606123D15D21009C446D /* libimageViewer.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		9C3C607323D164FE009C446D /* imageViewerCmd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9C3C607823D164FE009C446D /* Build configuration list for PBXNativeTarget "imageViewerCmd" */;
+			buildPhases = (
+				9C3C607023D164FE009C446D /* Sources */,
+				9C3C607123D164FE009C446D /* Frameworks */,
+				9C3C607223D164FE009C446D /* CopyFiles */,
+				9C3C608223D16D5D009C446D /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9C3C608123D16D5D009C446D /* PBXTargetDependency */,
+			);
+			name = imageViewerCmd;
+			productName = imageViewerCmd;
+			productReference = 9C3C607423D164FE009C446D /* imageViewerCmd */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -94,6 +173,10 @@
 				ORGANIZATIONNAME = "Michael Kirschner";
 				TargetAttributes = {
 					9C3C606023D15D21009C446D = {
+						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1130;
+					};
+					9C3C607323D164FE009C446D = {
 						CreatedOnToolsVersion = 11.3;
 					};
 				};
@@ -112,6 +195,7 @@
 			projectRoot = "";
 			targets = (
 				9C3C606023D15D21009C446D /* imageViewer */,
+				9C3C607323D164FE009C446D /* imageViewerCmd */,
 			);
 		};
 /* End PBXProject section */
@@ -121,11 +205,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C3C606723D15D21009C446D /* imageViewer.m in Sources */,
+				9C3C606F23D15D5E009C446D /* entry.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9C3C607023D164FE009C446D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C3C607723D164FE009C446D /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9C3C608123D16D5D009C446D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9C3C606023D15D21009C446D /* imageViewer */;
+			targetProxy = 9C3C608023D16D5D009C446D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9C3C606823D15D21009C446D /* Debug */ = {
@@ -183,6 +283,8 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 			};
 			name = Debug;
 		};
@@ -234,30 +336,68 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 			};
 			name = Release;
 		};
 		9C3C606B23D15D21009C446D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		9C3C606C23D15D21009C446D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = lib;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9C3C607923D164FE009C446D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEPLOYMENT_LOCATION = NO;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9C3C607A23D164FE009C446D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEPLOYMENT_LOCATION = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -278,6 +418,15 @@
 			buildConfigurations = (
 				9C3C606B23D15D21009C446D /* Debug */,
 				9C3C606C23D15D21009C446D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9C3C607823D164FE009C446D /* Build configuration list for PBXNativeTarget "imageViewerCmd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C3C607923D164FE009C446D /* Debug */,
+				9C3C607A23D164FE009C446D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
