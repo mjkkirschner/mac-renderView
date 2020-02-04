@@ -8,6 +8,7 @@
 
 import Foundation
 import AppKit
+import MetalKit
 
 @_cdecl("say_hello")
 public func say_hello(){
@@ -27,31 +28,73 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
               styleMask: [.titled, .miniaturizable,.closable,.resizable],
                backing: NSWindow.BackingStoreType.buffered, defer: true);
     
+   
+
+    
      func applicationDidFinishLaunching(_ aNotification: Notification)
         {
              print("inside finish launch");
               win.makeKeyAndOrderFront(self);
             
+            //TODO refactor into method create mtkView.
+            let mtkView = MTKView();
+               //TODO look this up.
+               mtkView.translatesAutoresizingMaskIntoConstraints = false;
+               //add to window.
+               let view = win.contentView;
+               view?.addSubview(mtkView);
+               
+            //TODO look this up.
+            view!.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|[mtkView]|", options: [], metrics: nil, views: ["mtkView" : mtkView]))
+            view!.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[mtkView]|", options: [], metrics: nil, views: ["mtkView" : mtkView]))
+            
+            let device = MTLCreateSystemDefaultDevice()!
+            mtkView.device = device;
+            
+            //instantiate our renderer - which will render images into the view:
+            
+            let myRenderer = renderer(view: mtkView);
+            mtkView.delegate = myRenderer;
+            
+            
             //create some random data.
             var arr = (0...600*600*4).map( {_ in UInt8.random(in: 0...255)} )
             let pointer: UnsafeMutablePointer< UInt8 > = UnsafeMutablePointer(&arr)
+          
+            var i = 0;
+            Timer.scheduledTimer(withTimeInterval: 0.00001, repeats: true) { timer in
+                i = i + 1;
+                arr[i] = UInt8(i%255);
+                
+                myRenderer.UpdateTextureWithColorDataPointer(tex: myRenderer.texture,pointer: pointer);
+            }
             
-            let image = CreateImageFromARGB32Bitmap(width: 600,height: 600,address: pointer);
-            
-            let nsimg = NSImage(cgImage: image, size: NSZeroSize)
-            let imageViewObject = NSImageView(frame: NSRect(origin: .zero, size: nsimg.size))
-            imageViewObject.image = nsimg;
-            
-            win.contentView?.addSubview(imageViewObject);
              print("makeKey window");
             
-        }
+         
+            }
+            
 
         func applicationWillTerminate(_ aNotification: Notification) {
                 // Insert code here to tear down your application
         }
 }
 
+
+
+func CreateBitmapContextFromARGB32Bitmap(width:uint,height:uint, address:UnsafeMutablePointer<CUnsignedChar>) -> CGContext {
+    let bitsPerColor:size_t = 8;
+       let bitsPerPixel:size_t = 32;
+       let rowBytes:uint = uint(Int(width) * (bitsPerPixel/bitsPerColor));
+       let retVal:CGContext;
+       let colorSpace:CGColorSpace = CGColorSpace(name:CGColorSpace.genericRGBLinear)!;
+         
+    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue)
+    
+    retVal = CGContext(data: address,width: Int(width),height: Int(height),bitsPerComponent: bitsPerColor,bytesPerRow: Int(rowBytes),space: colorSpace,bitmapInfo: bitmapInfo.rawValue)!;
+    return retVal;
+    
+}
 
     
 //create an image from a buffer.
@@ -78,11 +121,7 @@ func CreateImageFromARGB32Bitmap(width:uint,height:uint, address:UnsafeMutablePo
     retVal = CGImage(width:Int(width), height:Int(height), bitsPerComponent:bitsPerColor, bitsPerPixel:bitsPerPixel, bytesPerRow:Int(rowBytes),space: colorSpace , bitmapInfo: bitmapInfo, provider: dataProvider, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)!;
     return retVal;
 }
-/*
-func CGImageRef CreateImageFromARGB32Bitmap(     unsigned int height,     unsigned int width,     void *baseAddr,     unsigned int rowBytes) {     const size_t bitsPerComponent = 8;     const size_t bitsPerPixel = 32;
-    CGImageRef retVal = NULL;
-    // Create a data provider. We pass in NULL for the info     // and the release procedure pointer.     CGDataProviderRef dataProvider =             CGDataProviderCreateWithData(                     NULL, baseAddr, rowBytes * height, NULL);     // Get our hands on the generic RGB color space.     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateWithName(             kCGColorSpaceGenericRGB);     // Create an image     retVal = CGImageCreate(             width, height, bitsPerComponent, bitsPerPixel,             rowBytes, rgbColorSpace, kCGImageAlphaPremultipliedFirst,             dataProvider, NULL, true, kCGRenderingIntentDefault);     // The data provider and color space now belong to the     // image so we can release them.     CGDataProviderRelease(dataProvider);     CGColorSpaceRelease(rgbColorSpace);     return retVal; }
-*/
+
 class entryPoint{
     init() {
     }
