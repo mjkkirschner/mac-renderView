@@ -28,7 +28,6 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
               styleMask: [.titled, .miniaturizable,.closable,.resizable],
                backing: NSWindow.BackingStoreType.buffered, defer: true);
     
-   
 
     
      func applicationDidFinishLaunching(_ aNotification: Notification)

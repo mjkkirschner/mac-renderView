@@ -30,7 +30,8 @@ typedef struct
 vertex RasterizerData
 vertexShader(uint vertexID [[ vertex_id ]],
              constant AAPLVertex *vertexArray [[ buffer(AAPLVertexInputIndexVertices) ]],
-             constant vector_uint2 *viewportSizePointer  [[ buffer(AAPLVertexInputIndexViewportSize) ]])
+             constant vector_uint2 *viewportSizePointer  [[ buffer(AAPLVertexInputIndexViewportSize) ]],
+              constant float &scaleFactor)
 
 {
 
@@ -48,7 +49,7 @@ vertexShader(uint vertexID [[ vertex_id ]],
     //  divide the pixel coordinates by half the size of the viewport.
     // Z is set to 0.0 and w to 1.0 because this is 2D sample.
     out.position = vector_float4(0.0, 0.0, 0.0, 1.0);
-    out.position.xy = pixelSpacePosition / (viewportSize / 2.0);
+    out.position.xy = pixelSpacePosition / (viewportSize/scaleFactor);
 
     // Pass the input textureCoordinate straight to the output RasterizerData. This value will be
     //   interpolated with the other textureCoordinate values in the vertices that make up the

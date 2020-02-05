@@ -20,6 +20,7 @@ class renderer: NSObject,MTKViewDelegate {
     var planeVerts:MTLBuffer;
     var vertNum:Int;
     var viewPortSize:vector_uint2?;
+    var scaleFac:Float;
     
     public init(view:MTKView){
         
@@ -29,6 +30,7 @@ class renderer: NSObject,MTKViewDelegate {
         device = view.device!;
         texture = renderer.CreateMetalTexture(width: width,height: height);
         viewPortSize = vector_uint2(UInt32(width), UInt32(height));
+        scaleFac = Float(view.window!.backingScaleFactor);
         let quadVertices =
                // Pixel positions, Texture coordinates
                  //TODO normalize these and scale them.... or create these when we need to after the image size/format is known.
@@ -77,11 +79,15 @@ class renderer: NSObject,MTKViewDelegate {
     
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        
         viewPortSize!.x = UInt32(size.width);
         viewPortSize!.y = UInt32(size.height);
+        scaleFac = Float(view.window!.backingScaleFactor);
+
+        
        }
        
-       func draw(in view: MTKView) {
+    func draw(in view: MTKView) {
           // Create a new command buffer for each render pass to the current drawable
         
         var commandBuffer = commandQ.makeCommandBuffer();
@@ -98,6 +104,8 @@ class renderer: NSObject,MTKViewDelegate {
             renderEncoder!.setRenderPipelineState(pipelineState!);
             renderEncoder!.setVertexBuffer(planeVerts, offset: 0, index: Int(AAPLVertexInputIndexVertices.rawValue));
             renderEncoder!.setVertexBytes(&viewPortSize, length: MemoryLayout.size(ofValue: viewPortSize), index: Int(AAPLVertexInputIndexViewportSize.rawValue));
+            
+            renderEncoder!.setVertexBytes(&scaleFac, length:MemoryLayout<Float>.size, index: 2);
             
             // Set the texture object.  The AAPLTextureIndexBaseColor enum value corresponds
                               ///  to the 'colorMap' argument in the 'samplingShader' function because its
