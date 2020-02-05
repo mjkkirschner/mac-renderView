@@ -61,13 +61,25 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
             let pointer: UnsafeMutablePointer< UInt8 > = UnsafeMutablePointer(&arr)
           
             var i = 0;
-            Timer.scheduledTimer(withTimeInterval: 0.00001, repeats: true) { timer in
-                i = i + 1;
-                arr[i] = UInt8(i%255);
-                
-                myRenderer.UpdateTextureWithColorDataPointer(tex: myRenderer.texture,pointer: pointer);
-            }
+
             
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+                       
+                          myRenderer.UpdateTextureWithColorDataPointer(tex: myRenderer.texture,pointer: pointer);
+                      }
+            
+          
+            DispatchQueue.global(qos: .background).async {
+                while(i < arr.count-1){
+                    arr[i] = UInt8(i%255);
+                    
+                    i = i + 1;
+                }
+            }
+
+              
+        
+           
              print("makeKey window");
             
          
