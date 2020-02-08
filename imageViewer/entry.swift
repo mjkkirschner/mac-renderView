@@ -10,25 +10,50 @@ import Foundation
 import AppKit
 import MetalKit
 
-@_cdecl("say_hello")
-public func say_hello(){
+var controller:TestApplicationController? = nil;
+
+@_cdecl("start_render_view")
+public func start_render_view(width:Int,height:Int){
     print("Hello, World - from swift!")
     let app = NSApplication.shared;
-    let con =  TestApplicationController();
-    app.delegate = con;
+    controller =  TestApplicationController(width: width,height: height);
+    app.delegate = controller;
      print("about to try running")
     app.run();
     
     print("GoodBye, World - from swift!");
 }
 
+@_cdecl("update_tex")
+public func update_tex(data:UnsafeMutablePointer<uint8>){
+    controller?.updateTextureData(data: data);
+}
+
 final class TestApplicationController: NSObject, NSApplicationDelegate
 {
-    let win = NSWindow(contentRect: NSMakeRect(100, 100, 600, 600),
-              styleMask: [.titled, .miniaturizable,.closable,.resizable],
-               backing: NSWindow.BackingStoreType.buffered, defer: true);
+    var win:NSWindow;
+    var imageWidth:Int;
+    var imageHeight:Int;
+    var imageData: Array<uint8>;
+    var pointer:UnsafeMutablePointer<uint8>;
     
+    init(width:Int,height:Int) {
+        win = NSWindow(contentRect: NSMakeRect(100, 100, CGFloat(width), CGFloat(height)),
+                    styleMask: [.titled, .miniaturizable,.closable,.resizable],
+                     backing: NSWindow.BackingStoreType.buffered, defer: true);
+        imageWidth = width;
+        imageHeight = height;
+        
+        print(imageWidth);
+        print(imageHeight);
+        //create some random data.
+        //we assume we are writing RGBA colors
+        //rgba8Unorm texture pix format width * height * 4 bytes per pixel.
+        imageData = (0...imageWidth*imageHeight*4).map( {_ in UInt8.random(in: 0...255)} );
+        pointer = UnsafeMutablePointer(&imageData);
 
+    }
+    
     
      func applicationDidFinishLaunching(_ aNotification: Notification)
         {
@@ -52,23 +77,22 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
             
             //instantiate our renderer - which will render images into the view:
             
-            let myRenderer = renderer(view: mtkView);
-            mtkView.delegate = myRenderer;
+            let tex2dRendererInstance = renderer(view: mtkView);
+            mtkView.delegate = tex2dRendererInstance;
             
             
-            //create some random data.
-            var arr = (0...600*600*4).map( {_ in UInt8.random(in: 0...255)} )
-            let pointer: UnsafeMutablePointer< UInt8 > = UnsafeMutablePointer(&arr)
+           
           
             var i = 0;
 
+            //update the image fast.
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
+            { timer in
+                tex2dRendererInstance.UpdateTextureWithColorDataPointer(tex: tex2dRendererInstance.texture,pointer: self.pointer);
+                print("inside timer");
+            }
             
-            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                       
-                          myRenderer.UpdateTextureWithColorDataPointer(tex: myRenderer.texture,pointer: pointer);
-                      }
-            
-          
+          /*
             DispatchQueue.global(qos: .background).async {
                 while(i < arr.count-1){
                     arr[i] = UInt8(i%255);
@@ -76,10 +100,7 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
                     i = i + 1;
                 }
             }
-
-              
-        
-           
+        */
              print("makeKey window");
             
          
@@ -89,49 +110,14 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
         func applicationWillTerminate(_ aNotification: Notification) {
                 // Insert code here to tear down your application
         }
+    
+    func updateTextureData(data:UnsafeMutablePointer<uint8>) {
+        print("setting pointer to", data);
+        pointer = data;
+    }
 }
 
 
-
-func CreateBitmapContextFromARGB32Bitmap(width:uint,height:uint, address:UnsafeMutablePointer<CUnsignedChar>) -> CGContext {
-    let bitsPerColor:size_t = 8;
-       let bitsPerPixel:size_t = 32;
-       let rowBytes:uint = uint(Int(width) * (bitsPerPixel/bitsPerColor));
-       let retVal:CGContext;
-       let colorSpace:CGColorSpace = CGColorSpace(name:CGColorSpace.genericRGBLinear)!;
-         
-    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.noneSkipFirst.rawValue)
-    
-    retVal = CGContext(data: address,width: Int(width),height: Int(height),bitsPerComponent: bitsPerColor,bytesPerRow: Int(rowBytes),space: colorSpace,bitmapInfo: bitmapInfo.rawValue)!;
-    return retVal;
-    
-}
-
-    
-//create an image from a buffer.
-func CreateImageFromARGB32Bitmap(width:uint,height:uint, address:UnsafeMutablePointer<CUnsignedChar>)->CGImage
-{
-    let releaseMaskImagePixelData: CGDataProviderReleaseDataCallback = { (info: UnsafeMutableRawPointer?, data: UnsafeRawPointer, size: Int) -> () in
-    // https://developer.apple.com/reference/coregraphics/cgdataproviderreleasedatacallback
-    // N.B. 'CGDataProviderRelease' is unavailable: Core Foundation objects are automatically memory managed
-    return
-    };
-    
-    let bitsPerColor:size_t = 8;
-    let bitsPerPixel:size_t = 32;
-    let rowBytes:uint = uint(Int(width) * (bitsPerPixel/bitsPerColor));
-    let retVal:CGImage;
-    
-    let dataProvider = CGDataProvider(dataInfo: nil,data: address,size: Int(rowBytes*height),releaseData: releaseMaskImagePixelData)!;
-    
-    let colorSpace:CGColorSpace = CGColorSpace(name:CGColorSpace.genericRGBLinear)!;
-    
-    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue)
-        .union(.byteOrder32Little)
-    
-    retVal = CGImage(width:Int(width), height:Int(height), bitsPerComponent:bitsPerColor, bitsPerPixel:bitsPerPixel, bytesPerRow:Int(rowBytes),space: colorSpace , bitmapInfo: bitmapInfo, provider: dataProvider, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)!;
-    return retVal;
-}
 
 class entryPoint{
     init() {

@@ -8,10 +8,10 @@
 
 #include <iostream>
 // only "extern" when targeting C.
-extern "C" void say_hello();
+extern "C" void start_render_view(int width,int height);
 
 int main(int argc, const char * argv[]) {
-    say_hello();
+    start_render_view(600,600);
     std::cout << std::endl << "called from cpp" << std::endl;
     return 0;
 }

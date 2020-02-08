@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C35838B23E7A46900406F14 /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 9C35838A23E7A46900406F14 /* shaders.metal */; };
-		9C35838E23E7B1A200406F14 /* renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C35838D23E7B1A200406F14 /* renderer.swift */; };
+		9C35838E23E7B1A200406F14 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C35838D23E7B1A200406F14 /* Renderer.swift */; };
 		9C3C606F23D15D5E009C446D /* entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C606E23D15D5E009C446D /* entry.swift */; };
 		9C3C607723D164FE009C446D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C607623D164FE009C446D /* main.cpp */; };
 		9C3C607E23D16D5D009C446D /* libimageViewer.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C3C606123D15D21009C446D /* libimageViewer.dylib */; };
@@ -51,7 +51,7 @@
 /* Begin PBXFileReference section */
 		9C35838A23E7A46900406F14 /* shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
 		9C35838C23E7A62100406F14 /* shaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shaderTypes.h; sourceTree = "<group>"; };
-		9C35838D23E7B1A200406F14 /* renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = renderer.swift; sourceTree = "<group>"; };
+		9C35838D23E7B1A200406F14 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		9C3839BE23E912AF00703595 /* ImageViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageViewer-Bridging-Header.h"; sourceTree = "<group>"; };
 		9C3C606123D15D21009C446D /* libimageViewer.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libimageViewer.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C3C606E23D15D5E009C446D /* entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = entry.swift; sourceTree = "<group>"; };
@@ -103,7 +103,7 @@
 				9C3C606E23D15D5E009C446D /* entry.swift */,
 				9C35838A23E7A46900406F14 /* shaders.metal */,
 				9C35838C23E7A62100406F14 /* shaderTypes.h */,
-				9C35838D23E7B1A200406F14 /* renderer.swift */,
+				9C35838D23E7B1A200406F14 /* Renderer.swift */,
 				9C3839BE23E912AF00703595 /* ImageViewer-Bridging-Header.h */,
 			);
 			path = imageViewer;
@@ -215,7 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C35838E23E7B1A200406F14 /* renderer.swift in Sources */,
+				9C35838E23E7B1A200406F14 /* Renderer.swift in Sources */,
 				9C3C606F23D15D5E009C446D /* entry.swift in Sources */,
 				9C35838B23E7A46900406F14 /* shaders.metal in Sources */,
 			);

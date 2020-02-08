@@ -52,14 +52,24 @@ class renderer: NSObject,MTKViewDelegate {
         vertNum = quadVertices.count * MemoryLayout<AAPLVertex>.stride /  MemoryLayout<AAPLVertex>.size;
         print (vertNum);
         /// Create the render pipeline.
+        print("about to try to access device");
+         print(device);
+        
+        print(Bundle.main);
+        
+        // Load the shaders from the bundled library
+        let frameworkBundle = Bundle(for: renderer.self)
+        
+        guard let defaultLibrary = try? device.makeDefaultLibrary(bundle: frameworkBundle) else{
+            fatalError("Could not load default library from specified bundle")
 
-        // Load the shaders from the default library
-        let defaultLibrary = device.makeDefaultLibrary();
-        let vertexFunction = defaultLibrary?.makeFunction(name: "vertexShader");
-        let fragmentFunction = defaultLibrary?.makeFunction(name: "samplingShader");
+        }
+        print(defaultLibrary);
+        let vertexFunction = defaultLibrary.makeFunction(name: "vertexShader");
+        let fragmentFunction = defaultLibrary.makeFunction(name: "samplingShader");
         
          // Set up a descriptor for creating a pipeline state object
-        var pipelinestatedescriptor = MTLRenderPipelineDescriptor();
+        let pipelinestatedescriptor = MTLRenderPipelineDescriptor();
         pipelinestatedescriptor.label = "Texturing Pipeline";
         pipelinestatedescriptor.vertexFunction = vertexFunction;
         pipelinestatedescriptor.fragmentFunction = fragmentFunction;
@@ -90,22 +100,23 @@ class renderer: NSObject,MTKViewDelegate {
     func draw(in view: MTKView) {
           // Create a new command buffer for each render pass to the current drawable
         
-        var commandBuffer = commandQ.makeCommandBuffer();
+        let commandBuffer = commandQ.makeCommandBuffer();
         commandBuffer?.label = "MyCommand";
         
 
                // Obtain a renderPassDescriptor generated from the view's drawable textures
         
-        var renderPassDescriptor = view.currentRenderPassDescriptor;
+        let renderPassDescriptor = view.currentRenderPassDescriptor;
         if(renderPassDescriptor != nil){
-            var renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor!);
+            let renderEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor!);
             renderEncoder!.label? = "MyRenderEncoder";
             renderEncoder!.setViewport(MTLViewport(originX: 0.0, originY: 0.0, width: Double(viewPortSize!.x), height: Double(viewPortSize!.y), znear: -1.0, zfar: 1.0));
             renderEncoder!.setRenderPipelineState(pipelineState!);
             renderEncoder!.setVertexBuffer(planeVerts, offset: 0, index: Int(AAPLVertexInputIndexVertices.rawValue));
             renderEncoder!.setVertexBytes(&viewPortSize, length: MemoryLayout.size(ofValue: viewPortSize), index: Int(AAPLVertexInputIndexViewportSize.rawValue));
             
-            renderEncoder!.setVertexBytes(&scaleFac, length:MemoryLayout<Float>.size, index: 2);
+           
+            renderEncoder!.setVertexBytes( UnsafePointer<Float>(&scaleFac), length:MemoryLayout<Float>.size, index: 2);
             
             // Set the texture object.  The AAPLTextureIndexBaseColor enum value corresponds
                               ///  to the 'colorMap' argument in the 'samplingShader' function because its
@@ -124,9 +135,6 @@ class renderer: NSObject,MTKViewDelegate {
         // Finalize rendering here & push the command buffer to the GPU
 
                   commandBuffer?.commit();
-             
-
-        
            }
     
 
