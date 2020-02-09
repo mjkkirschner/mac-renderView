@@ -12,16 +12,36 @@ import MetalKit
 
 var controller:TestApplicationController? = nil;
 
+var app:NSApplication? = nil ;
+
 @_cdecl("start_render_view")
 public func start_render_view(width:Int,height:Int){
     print("Hello, World - from swift!")
-    let app = NSApplication.shared;
+    app = NSApplication.shared;
     controller =  TestApplicationController(width: width,height: height);
-    app.delegate = controller;
+    app!.delegate = controller;
      print("about to try running")
-    app.run();
     
+    //app.run();
+    
+    //since we do not use the built in main loop
+    //need to finish launching ourselves.
+    app?.finishLaunching();
     print("GoodBye, World - from swift!");
+}
+
+@_cdecl("next_frame")
+public func next_frame(){
+    var event:NSEvent? = nil;
+    repeat{
+        controller?.win.viewsNeedDisplay = true;
+        event = (app?.nextEvent(matching: NSEvent.EventTypeMask.any, until:nil, inMode: RunLoop.Mode.default, dequeue:true));
+        if  (event != nil)
+        {
+            app?.sendEvent(event!);
+        }
+    }
+        while (event != nil);
 }
 
 @_cdecl("update_tex")
