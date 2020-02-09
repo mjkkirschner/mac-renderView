@@ -117,12 +117,3 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
     }
 }
 
-
-
-class entryPoint{
-    init() {
-    }
-    func hello() {
-        print("helloWorld");
-    }
-}
