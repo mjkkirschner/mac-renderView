@@ -22,26 +22,24 @@ class renderer: NSObject,MTKViewDelegate {
     var viewPortSize:vector_uint2?;
     var scaleFac:Float;
     
-    public init(view:MTKView){
-        
-        let width = 600;
-        let height = 600;
-        
+    public init(view:MTKView,width:Int, height:Int){
+                
         device = view.device!;
         texture = renderer.CreateMetalTexture(width: width,height: height);
         viewPortSize = vector_uint2(UInt32(width), UInt32(height));
         scaleFac = Float(view.window!.backingScaleFactor);
+        let fw = Float(width) ;
+        let fh = Float(height);
         let quadVertices =
                // Pixel positions, Texture coordinates
-                 //TODO normalize these and scale them.... or create these when we need to after the image size/format is known.
            [
-               AAPLVertex(position:vector_float2(600,-600),textureCoordinate:vector_float2(1.0, 1.0)),
-               AAPLVertex(position:vector_float2(-600,-600),textureCoordinate:vector_float2(0.0, 1.0)),
-               AAPLVertex(position:vector_float2(-600,600),textureCoordinate:vector_float2(0.0, 0.0)),
+            AAPLVertex(position:vector_float2(1.0*fw,-1.0*fh),textureCoordinate:vector_float2(1.0, 1.0)),
+            AAPLVertex(position:vector_float2(-1.0*fw,-1.0*fh),textureCoordinate:vector_float2(0.0, 1.0)),
+            AAPLVertex(position:vector_float2(-1.0*fw,1.0*fh),textureCoordinate:vector_float2(0.0, 0.0)),
                
-               AAPLVertex(position:vector_float2(600,-600),textureCoordinate:vector_float2(1.0, 1.0)),
-               AAPLVertex(position:vector_float2(-600,600),textureCoordinate:vector_float2(0.0, 0.0)),
-               AAPLVertex(position:vector_float2(600,600),textureCoordinate:vector_float2(1.0, 0.0)),
+            AAPLVertex(position:vector_float2(1.0*fw,-1.0*fh),textureCoordinate:vector_float2(1.0, 1.0)),
+            AAPLVertex(position:vector_float2(-1.0*fw,1.0*fh),textureCoordinate:vector_float2(0.0, 0.0)),
+            AAPLVertex(position:vector_float2(1.0*fw,1.0*fh),textureCoordinate:vector_float2(1.0, 0.0)),
                
            ];
         

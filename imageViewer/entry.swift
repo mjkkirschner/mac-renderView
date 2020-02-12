@@ -49,7 +49,16 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
         //create some random data.
         //we assume we are writing RGBA colors
         //rgba8Unorm texture pix format width * height * 4 bytes per pixel.
-        imageData = (0...imageWidth*imageHeight*4).map( {_ in UInt8.random(in: 0...255)} );
+        let start = DispatchTime.now() // <<<<<<<<<< Start time
+
+        //imageData = (0...imageWidth*imageHeight*4).map( {_ in UInt8.random(in: 0...255)} );
+        //imageData = (0...imageWidth*imageHeight*4).map({UInt8($0%255)});
+        imageData = [UInt8]();
+        imageData.reserveCapacity(imageWidth*imageHeight*4);
+        let end = DispatchTime.now() // <<<<<<<<<< Start time
+        
+        print("took",Double(end.uptimeNanoseconds-start.uptimeNanoseconds)/1_000_000_000,"to generate random data");
+
         pointer = UnsafeMutablePointer(&imageData);
 
     }
@@ -77,14 +86,9 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
             
             //instantiate our renderer - which will render images into the view:
             
-            let tex2dRendererInstance = renderer(view: mtkView);
+            let tex2dRendererInstance = renderer(view: mtkView, width: imageWidth, height: imageHeight);
             mtkView.delegate = tex2dRendererInstance;
             
-            
-           
-          
-            var i = 0;
-
             //update the image fast.
             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true)
             { timer in
@@ -92,15 +96,6 @@ final class TestApplicationController: NSObject, NSApplicationDelegate
                 print("inside timer");
             }
             
-          /*
-            DispatchQueue.global(qos: .background).async {
-                while(i < arr.count-1){
-                    arr[i] = UInt8(i%255);
-                    
-                    i = i + 1;
-                }
-            }
-        */
              print("makeKey window");
             
          
